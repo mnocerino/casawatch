@@ -1,0 +1,45 @@
+<html>
+<head>
+<script type="text/JavaScript">
+var url = "http://192.168.1.15/tmpfs/auto.jpg"; //url to load image from
+var refreshInterval = 250; //in ms
+var drawDate = false; //draw date string
+var img;
+
+function init() {
+    var canvas = document.getElementById("canvas");
+    var context = canvas.getContext("2d");
+    img = new Image();
+    img.onload = function() {
+        canvas.setAttribute("width", img.width*2)
+        canvas.setAttribute("height", img.height*2)
+        context.drawImage(this, 0, 0);
+        if(drawDate) {
+            var now = new Date();
+            var text = now.toLocaleDateString() + " " + now.toLocaleTimeString();
+            var maxWidth = 100;
+            var x = img.width*2-10-maxWidth;
+            var y = img.height*2-10;
+            context.strokeStyle = 'black';
+            context.lineWidth = 2;
+            context.strokeText(text, x, y, maxWidth);
+            context.fillStyle = 'white';
+            context.fillText(text, x, y, maxWidth);
+        }
+    };
+    refresh();
+}
+function refresh()
+{
+    img.src = url + "?t=" + new Date().getTime();
+    setTimeout("refresh()",refreshInterval);
+}
+
+</script>
+<title>JavaScript Refresh Example</title>
+</head>
+
+<body onload="JavaScript:init();">
+<canvas id="canvas"/>
+</body>
+</html>
